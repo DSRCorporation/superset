@@ -1,20 +1,3 @@
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 ######################################################################
 # Node stage to deal with static asset construction
 ######################################################################
@@ -104,8 +87,8 @@ CMD /usr/bin/run-server.sh
 # Dev image...
 ######################################################################
 FROM lean AS dev
-ARG GECKODRIVER_VERSION=v0.32.0
-ARG FIREFOX_VERSION=106.0.3
+ARG GECKODRIVER_VERSION=v0.29.1
+ARG FIREFOX_VERSION=90.0
 
 COPY ./requirements/*.txt ./docker/requirements-*.txt/ /app/requirements/
 
@@ -119,6 +102,8 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_
     tar xvfz /tmp/geckodriver.tar.gz -C /tmp && \
     mv /tmp/geckodriver /usr/local/bin/geckodriver && \
     rm /tmp/geckodriver.tar.gz
+
+RUN apt-get update && apt-get install -y wget bzip2 libxtst6 libgtk-3-0 libx11-xcb-dev libdbus-glib-1-2 libxt6 libpci-dev && rm -rf /var/lib/apt/lists/*
 
 # Install Firefox
 RUN wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 -O /opt/firefox.tar.bz2 && \
@@ -135,7 +120,7 @@ USER superset
 ######################################################################
 # CI image...
 ######################################################################
-FROM lean AS ci
+FROM dev AS ci
 
 COPY --chown=superset ./docker/docker-bootstrap.sh /app/docker/
 COPY --chown=superset ./docker/docker-init.sh /app/docker/

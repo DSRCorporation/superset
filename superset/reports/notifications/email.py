@@ -137,7 +137,7 @@ class EmailNotification(BaseNotification):  # pylint: disable=too-few-public-met
         for msgid in images.keys():
             img_tags.append(
                 f"""<div class="image">
-                    <img width="1000px" src="cid:{msgid}">
+                    <img width="100%" style="display:block" src="cid:{msgid}">
                 </div>
                 """
             )

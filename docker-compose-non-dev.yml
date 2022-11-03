@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-x-superset-image: &superset-image apache/superset:${TAG:-latest-dev}
+x-superset-image: &superset-image superset:1.0.0rc1
 x-superset-depends-on: &superset-depends-on
   - db
   - redis
@@ -51,6 +51,8 @@ services:
       - 8088:8088
     depends_on: *superset-depends-on
     volumes: *superset-volumes
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   superset-init:
     image: *superset-image
@@ -89,8 +91,17 @@ services:
 
 volumes:
   superset_home:
-    external: false
+    driver_opts:
+      type: none
+      device: /home/silvia/Desktop/superset/.data/superset_home
+      o: bind
   db_home:
-    external: false
+    driver_opts:
+      type: none
+      device: /home/silvia/Desktop/superset/.data/db_home
+      o: bind
   redis:
-    external: false
+    driver_opts:
+      type: none
+      device: /home/silvia/Desktop/superset/.data/redis
+      o: bind

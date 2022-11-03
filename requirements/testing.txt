@@ -42,7 +42,7 @@ google-auth-oauthlib==0.4.6
     # via
     #   pandas-gbq
     #   pydata-google-auth
-google-cloud-bigquery[bqstorage,pandas]==2.29.0
+google-cloud-bigquery[bqstorage,pandas]==2.30.0
     # via
     #   apache-superset
     #   pandas-gbq
@@ -105,7 +105,7 @@ pyasn1==0.4.8
     #   rsa
 pyasn1-modules==0.2.8
     # via google-auth
-pybigquery==0.10.2
+pybigquery==0.5.0
     # via apache-superset
 pydata-google-auth==1.2.0
     # via pandas-gbq
