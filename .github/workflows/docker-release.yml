@@ -1,6 +1,9 @@
 name: Docker
 
 on:
+  push:
+    branches:
+      - 'rm-stable'
   release:
     types: [published]
 jobs:
@@ -8,6 +11,9 @@ jobs:
     name: docker-release
     runs-on: ubuntu-latest
     steps:
+      - name: Add mask
+        run: |
+          echo "::add-mask::${{ secrets.DOCKERHUB_RM_URL }}"
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
         with:
@@ -16,7 +22,8 @@ jobs:
           ref: ${{ github.ref }}
       - shell: bash
         env:
-          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_RM_USER }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_RM_TOKEN }}
+          DOCKERHUB_URL: ${{ secrets.DOCKERHUB_RM_URL }}
         run: |
           .github/workflows/docker_build_push.sh
