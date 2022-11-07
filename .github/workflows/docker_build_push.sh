@@ -43,17 +43,6 @@ cat<<EOF
   - ${REPO_NAME}:${LATEST_TAG}
 EOF
 
-
-#docker build \
-#  -t "${REPO_NAME}:${SHA}" \
-#  -t "${REPO_NAME}:${REFSPEC}" \
-#  -t "${REPO_NAME}:${LATEST_TAG}" \
-#  --label "sha=${SHA}" \
-#  --label "built_at=$(date)" \
-#  --label "build_actor=${GITHUB_ACTOR}" \
-#  .
-#
-
 if [ -z "${DOCKERHUB_TOKEN}" ]; then
   # Skip if secrets aren't populated -- they're only visible for actions running in the repo (not on forks)
   echo "Skipping Docker push"
@@ -61,7 +50,7 @@ else
   # Login and push
 docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_TOKEN} ${DOCKERHUB_URL}
 docker build --no-cache -t "${REPO_NAME}:${REFSPEC}" .
-docker tag "${REPO_NAME}:${REFSPEC}" "${REPO_NAME}:${LATEST_TAG}"
+docker tag "${REPO_NAME}:${REFSPEC}" "${DOCKERHUB_URL}/${REPO_NAME}:${LATEST_TAG}"
 docker push "${REPO_NAME}:${LATEST_TAG}"
-docker push "${REPO_NAME}:${REFSPEC}"
+#docker push "${REPO_NAME}:${REFSPEC}"
 fi
