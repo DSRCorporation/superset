@@ -50,7 +50,8 @@ else
   # Login and push
 docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_TOKEN} ${DOCKERHUB_URL}
 docker build --no-cache -t "${REPO_NAME}:${REFSPEC}" .
-docker tag "${REPO_NAME}:${REFSPEC}" "${DOCKERHUB_URL}/${REPO_NAME}:${LATEST_TAG}"
-docker push "${REPO_NAME}:${LATEST_TAG}"
+echo docker image ls
+docker image tag "${REPO_NAME}:${REFSPEC}" "${DOCKERHUB_URL}/${REPO_NAME}:${LATEST_TAG}"
+docker image push "${DOCKERHUB_URL}/${REPO_NAME}:${LATEST_TAG}"
 #docker push "${REPO_NAME}:${REFSPEC}"
 fi
